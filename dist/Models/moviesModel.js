@@ -1,6 +1,9 @@
-import { model, Schema } from 'mongoose';
-const moveiSchema = new Schema({
-    id: Schema.Types.ObjectId,
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.moviesModel = void 0;
+const mongoose_1 = require("mongoose");
+const moveiSchema = new mongoose_1.Schema({
+    id: mongoose_1.Schema.Types.ObjectId,
     movieName: {
         type: String,
         required: true,
@@ -26,4 +29,4 @@ const moveiSchema = new Schema({
         default: 0,
     },
 }, { minimize: false });
-export const moviesModel = model('movies', moveiSchema);
+exports.moviesModel = mongoose_1.model('movies', moveiSchema);

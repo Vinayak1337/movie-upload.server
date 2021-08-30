@@ -1,10 +1,15 @@
-export const UploadThumbnail = (req, res) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StreamVideo = exports.StreamThumbnail = exports.UploadVideo = exports.UploadThumbnail = void 0;
+const UploadThumbnail = (req, res) => {
     res.status(200).json(`possibillion-sample-prj-server.herokuapp.com/thumbnail/${req.file?.filename}`);
 };
-export const UploadVideo = (req, res) => {
+exports.UploadThumbnail = UploadThumbnail;
+const UploadVideo = (req, res) => {
     res.status(200).json(`https://possibillion-sample-prj-server.herokuapp.com/video/${req.file?.filename}`);
 };
-export const StreamThumbnail = (store, req, res) => {
+exports.UploadVideo = UploadVideo;
+const StreamThumbnail = (store, req, res) => {
     store.thumbnailStore?.files.findOne({ filename: req.params['filename'] }, (error, result) => {
         if (error) {
             res.status(500).json(error.message);
@@ -18,7 +23,8 @@ export const StreamThumbnail = (store, req, res) => {
         readStream?.pipe(res);
     });
 };
-export const StreamVideo = (store, req, res) => {
+exports.StreamThumbnail = StreamThumbnail;
+const StreamVideo = (store, req, res) => {
     store.videoStore?.files.findOne({ filename: req.params['filename'] }, (error, video) => {
         if (error) {
             res.status(500).json(error.message);
@@ -53,3 +59,4 @@ export const StreamVideo = (store, req, res) => {
         readStream?.pipe(res);
     });
 };
+exports.StreamVideo = StreamVideo;

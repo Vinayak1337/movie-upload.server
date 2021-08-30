@@ -5,6 +5,8 @@ import fs from 'fs'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import { StaticOrigin, CustomOrigin } from '.'
+import moviesRouter from './Routes/movies'
+import uploadRouter from './Routes/upload'
 
 dotenv.config()
 
@@ -17,13 +19,16 @@ app.use(cors({
 app.use(bodyParser.json())
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-    res.status(500).json({ message: err.message });
-});
+    res.status(500).json({ message: err.message })
+})
 
 app.get('/', (_req: Request, res: Response) => {
     const htmlFile = fs.readFileSync('./index.html', 'utf8')
     res.send(htmlFile)
 })
+
+app.use('/movies', moviesRouter)
+app.use('/upload', uploadRouter)
 
 mongoose.connect(process.env['URI'] || '')
     .then(() => {
@@ -31,5 +36,5 @@ mongoose.connect(process.env['URI'] || '')
 
         app.listen(process.env['PORT'] || 8080, () => {
             console.log(`✅ Connected to port ${process.env['PORT'] || 8080}.`)
-        });
+        })
     })

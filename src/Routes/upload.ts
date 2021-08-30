@@ -5,6 +5,8 @@ import Grid from 'gridfs-stream'
 import { Router } from 'express'
 import { GridFsStore } from '..'
 import { StreamThumbnail, StreamVideo, UploadThumbnail, UploadVideo } from '../Controllers/upload'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const uploadRouter = Router();
 
