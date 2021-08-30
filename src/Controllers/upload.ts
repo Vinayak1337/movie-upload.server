@@ -2,11 +2,11 @@ import { GridFsStore } from ".."
 import { Request, Response } from 'express'
 
 export const UploadThumbnail = (req: Request, res: Response) => {
-    res.status(200).json(`https://possibillion-sample-project-server.herokuapp.com/thumbnail/${req.file?.filename}`)
+    res.status(200).json(`possibillion-sample-prj-server.herokuapp.com/thumbnail/${req.file?.filename}`)
 }
 
 export const UploadVideo = (req: Request, res: Response) => {
-    res.status(200).json(`https://possibillion-sample-project-server.herokuapp.com/video/${req.file?.filename}`)
+    res.status(200).json(`https://possibillion-sample-prj-server.herokuapp.com/video/${req.file?.filename}`)
 }
 
 export const StreamThumbnail = (store: GridFsStore, req: Request, res: Response) => {

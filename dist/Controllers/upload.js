@@ -1,8 +1,8 @@
 export const UploadThumbnail = (req, res) => {
-    res.status(200).json(`https://possibillion-sample-project-server.herokuapp.com/thumbnail/${req.file?.filename}`);
+    res.status(200).json(`possibillion-sample-prj-server.herokuapp.com/thumbnail/${req.file?.filename}`);
 };
 export const UploadVideo = (req, res) => {
-    res.status(200).json(`https://possibillion-sample-project-server.herokuapp.com/video/${req.file?.filename}`);
+    res.status(200).json(`https://possibillion-sample-prj-server.herokuapp.com/video/${req.file?.filename}`);
 };
 export const StreamThumbnail = (store, req, res) => {
     store.thumbnailStore?.files.findOne({ filename: req.params['filename'] }, (error, result) => {
