@@ -1,7 +1,6 @@
-import { Request, Response } from "express"
-import { moviesModel } from "../Models/moviesModel"
+const moviesModel = require("../Models/moviesModel")
 
-export const getMovies =  async (req: Request, res: Response) => {
+exports.getMovies =  async (req, res) => {
     try {
         const { limit } = req.body
 
@@ -18,7 +17,7 @@ export const getMovies =  async (req: Request, res: Response) => {
     }
 }
 
-export const postMovie = async (req: Request, res: Response) => {
+exports.postMovie = async (req, res) => {
     try {
         const { movieName, releasedOn, language, thumbnailUrl, videoUrl } = req.body
 

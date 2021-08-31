@@ -1,28 +1,27 @@
-import express, { Request, Response, NextFunction } from 'express'
-import cors from 'cors'
-import bodyParser from 'body-parser'
-import fs from 'fs'
-import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-import { StaticOrigin, CustomOrigin } from '.'
-import moviesRouter from './Routes/movies'
-import uploadRouter from './Routes/upload'
+const express = require('express')
+const cors = require('cors')
+const bodyParser = require('body-parser')
+const fs = require('fs')
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+const moviesRouter = require('./Routes/movies')
+const uploadRouter = require('./Routes/upload')
 
 dotenv.config()
 
 const app = express()
 
 app.use(cors({
-    origin: (origin: StaticOrigin | CustomOrigin | undefined, cb: Function) => cb(null, origin),
+    origin: (origin, cb) => cb(null, origin),
 }))
 
 app.use(bodyParser.json())
 
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+app.use((err, _req, res, _next) => {
     res.status(500).json({ message: err.message })
 })
 
-app.get('/', (_req: Request, res: Response) => {
+app.get('/', (_req, res) => {
     const htmlFile = fs.readFileSync('./index.html', 'utf8')
     res.send(htmlFile)
 })

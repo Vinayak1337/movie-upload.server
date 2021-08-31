@@ -1,7 +1,6 @@
-import { model, Schema } from 'mongoose'
+const mongoose = require('mongoose')
 
-const moveiSchema = new Schema({
-    id: Schema.Types.ObjectId,
+const moveiSchema = new mongoose.Schema({
     movieName: {
         type: String,
         required: true,
@@ -32,4 +31,4 @@ const moveiSchema = new Schema({
     }
 }, { minimize: false })
 
-export const moviesModel = model('movies', moveiSchema)
+module.exports = mongoose.model('movies', moveiSchema)

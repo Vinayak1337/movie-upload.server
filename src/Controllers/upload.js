@@ -1,18 +1,15 @@
-import { GridFsStore } from ".."
-import { Request, Response } from 'express'
-
 const baseurl = 'http://localhost:8080'
 // const baseUrl = 'https://possibillion-sample-prj-server.herokuapp.com'
 
-export const UploadThumbnail = (req: Request, res: Response) => {
+exports.UploadThumbnail = (req, res) => {
     res.status(200).json(`${baseurl}/upload/thumbnail/${req.file?.filename}`)
 }
 
-export const UploadVideo = (req: Request, res: Response) => {
+exports.UploadVideo = (req, res) => {
     res.status(200).json(`${baseurl}/upload/video/${req.file?.filename}`)
 }
 
-export const StreamThumbnail = async (store: GridFsStore, req: Request, res: Response) => {
+exports.StreamThumbnail = async (store, req, res) => {
     try {
         const thumbnail = await store.thumbnailStore?.files.findOne({ filename: req.params['filename'] } )
 
@@ -21,15 +18,15 @@ export const StreamThumbnail = async (store: GridFsStore, req: Request, res: Res
             return
         }
 
-        const readStream = store.thumbnailStore?.createReadStream(thumbnail)
+        const readStream = store.thumbnailStore?.createReadStream(thumbnail["filename"])
         readStream?.pipe(res)
     } catch (error) {
         console.log(error)
-        res.status(500).json(`Not found thumbnail | ${error.message}`)
+        res.status(500).json(`Something went wrong. ${error.message}`)
     }
 }
 
-export const StreamVideo = async (store: GridFsStore, req: Request, res: Response) => {
+exports.StreamVideo = async (store, req, res) => {
     try {
         const video = await store.videoStore?.files.findOne({ filename: req.params['filename'] })
 
@@ -67,7 +64,7 @@ export const StreamVideo = async (store: GridFsStore, req: Request, res: Respons
         readStream?.pipe(res)
     } catch (error) {
         console.log(error)
-        res.status(500).json(`Not found video | ${error.message}`)
+        res.status(500).json(`Something went wrong. ${error.message}`)
         return
     }
 }

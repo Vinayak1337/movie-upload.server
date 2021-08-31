@@ -1,16 +1,15 @@
-import multer from 'multer'
-import { GridFsStorage } from 'multer-gridfs-storage'
-import mongoose from 'mongoose'
-import Grid from 'gridfs-stream'
-import { Router } from 'express'
-import { GridFsStore } from '..'
-import { StreamThumbnail, StreamVideo, UploadThumbnail, UploadVideo } from '../Controllers/upload'
-import dotenv from 'dotenv'
+const multer = require('multer')
+const { GridFsStorage } = require('multer-gridfs-storage')
+const mongoose = require('mongoose')
+const Grid = require('gridfs-stream')
+const { Router } = require('express')
+const { StreamThumbnail, StreamVideo, UploadThumbnail, UploadVideo } = require('../Controllers/upload')
+const dotenv = require('dotenv')
 dotenv.config()
 
 const uploadRouter = Router();
 
-const store: GridFsStore = {
+const store = {
     videoStore: null,
     thumbnailStore: null,
 }
@@ -18,17 +17,16 @@ const store: GridFsStore = {
 const conn = mongoose.connection
 conn.once('open', () => {
     store.videoStore = Grid(conn.db, mongoose.mongo)
-    store.thumbnailStore = Grid(conn.db, mongoose.mongo)
+    store.videoStore.collection('videos')
 
-    store.videoStore?.collection('videos')
-    store.thumbnailStore?.collection('thumbnails')
-    store.thumbnailStore
+    store.thumbnailStore = Grid(conn.db, mongoose.mongo)
+    store.thumbnailStore.collection('thumbnails')
 
     console.log('Connected to Video Store & Thumbnail Store.')
 })
 
 const videosStorage = new GridFsStorage({
-    url: process.env['URI'] || '',
+    url: process.env['URI'],
     options: {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -40,7 +38,7 @@ const videosStorage = new GridFsStorage({
 })
 
 const thumbnailStorage = new GridFsStorage({
-    url: process.env['URI'] || '',
+    url: process.env['URI'],
     options: {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -62,4 +60,4 @@ uploadRouter.post('/video', videoMulter.single('video'), UploadVideo)
 
 uploadRouter.post('/thumbnail', thumbnailMulter.single('thumbnail'), UploadThumbnail)
 
-export default uploadRouter
+module.exports = uploadRouter
