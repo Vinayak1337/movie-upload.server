@@ -26,6 +26,10 @@ const moveiSchema = new Schema({
         type: Number,
         default: 0,
     },
+    uploadedOne: {
+        type: Date,
+        default: new Date(),
+    }
 }, { minimize: false })
 
 export const moviesModel = model('movies', moveiSchema)
