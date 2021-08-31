@@ -11,36 +11,34 @@ const UploadVideo = (req, res) => {
     res.status(200).json(`${baseurl}/upload/video/${req.file?.filename}`);
 };
 exports.UploadVideo = UploadVideo;
-const StreamThumbnail = (store, req, res) => {
-    store.thumbnailStore?.files.findOne({ filename: req.params['filename'] }, (error, result) => {
-        if (error) {
-            res.status(500).json(error.message);
+const StreamThumbnail = async (store, req, res) => {
+    try {
+        const thumbnail = await store.thumbnailStore?.files.findOne({ filename: req.params['filename'] });
+        if (!thumbnail) {
+            res.status(404).json('Did not find thumbnail');
             return;
         }
-        if (!result) {
-            res.status(404).json('Thumbnail Not found');
-            return;
-        }
-        const readStream = store.thumbnailStore?.createReadStream(result);
+        const readStream = store.thumbnailStore?.createReadStream(thumbnail);
         readStream?.pipe(res);
-    });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json(`Not found thumbnail | ${error.message}`);
+    }
 };
 exports.StreamThumbnail = StreamThumbnail;
-const StreamVideo = (store, req, res) => {
-    store.videoStore?.files.findOne({ filename: req.params['filename'] }, (error, video) => {
-        if (error) {
-            res.status(500).json(error.message);
-            return;
-        }
+const StreamVideo = async (store, req, res) => {
+    try {
+        const video = await store.videoStore?.files.findOne({ filename: req.params['filename'] });
         if (!video) {
-            res.status(404).json('Video Not found');
+            res.status(404).json('Did not find video');
             return;
         }
         let { range } = req.headers;
         if (!range)
             range = '0';
-        console.log(video._id);
-        const videoSize = video.length;
+        console.log(video["_id"]);
+        const videoSize = video["length"];
         const startPos = Number(range.replace(/\D/g, ""));
         const endPos = videoSize - 1;
         const contentLength = endPos - startPos + 1;
@@ -48,16 +46,21 @@ const StreamVideo = (store, req, res) => {
             "Content-Range": `bytes ${startPos}-${endPos}/${videoSize}`,
             "Accept-Ranges": "bytes",
             "Content-Length": contentLength,
-            "Content-Type": video.contentType,
+            "Content-Type": video["contentType"],
         };
         res.writeHead(206, headers);
         const readStream = store.videoStore?.createReadStream({
-            _id: video._id,
+            _id: video["_id"],
             range: {
                 startPos, endPos
             }
         });
         readStream?.pipe(res);
-    });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json(`Not found video | ${error.message}`);
+        return;
+    }
 };
 exports.StreamVideo = StreamVideo;
