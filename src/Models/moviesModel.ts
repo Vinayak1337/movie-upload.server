@@ -26,7 +26,7 @@ const moveiSchema = new Schema({
         type: Number,
         default: 0,
     },
-    uploadedOne: {
+    uploadedOn: {
         type: Date,
         default: new Date(),
     }
