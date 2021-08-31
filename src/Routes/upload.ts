@@ -46,7 +46,7 @@ const thumbnailStorage = new GridFsStorage({
         useUnifiedTopology: true,
     },
     file: async (_req, file) => ({
-        bucketName: 'videos',
+        bucketName: 'thumbnails',
         filename: `${file.originalname}.${file.mimetype.replace('image/', '')}`,
     })
 })

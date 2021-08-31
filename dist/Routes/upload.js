@@ -42,7 +42,7 @@ const thumbnailStorage = new multer_gridfs_storage_1.GridFsStorage({
         useUnifiedTopology: true,
     },
     file: async (_req, file) => ({
-        bucketName: 'videos',
+        bucketName: 'thumbnails',
         filename: `${file.originalname}.${file.mimetype.replace('image/', '')}`,
     })
 });
