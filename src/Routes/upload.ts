@@ -1,6 +1,6 @@
 import multer from 'multer'
 import { GridFsStorage } from 'multer-gridfs-storage'
-import { connection, mongo } from 'mongoose'
+import mongoose from 'mongoose'
 import Grid from 'gridfs-stream'
 import { Router } from 'express'
 import { GridFsStore } from '..'
@@ -15,10 +15,10 @@ const store: GridFsStore = {
     thumbnailStore: null,
 }
 
-
-connection.once('open', () => {
-    store.videoStore = Grid(connection.db, mongo)
-    store.thumbnailStore = Grid(connection.db, mongo)
+const conn = mongoose.connection
+conn.once('open', () => {
+    store.videoStore = Grid(conn.db, mongoose.mongo)
+    store.thumbnailStore = Grid(conn.db, mongoose.mongo)
 
     store.videoStore?.collection('videos')
     store.thumbnailStore?.collection('thumbnails')

@@ -65,8 +65,6 @@ export const StreamVideo = async (store: GridFsStore, req: Request, res: Respons
             }
         })
         readStream?.pipe(res)
-
-
     } catch (error) {
         console.log(error)
         res.status(500).json(`Not found video | ${error.message}`)

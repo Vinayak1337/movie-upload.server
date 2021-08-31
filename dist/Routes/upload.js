@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const multer_1 = __importDefault(require("multer"));
 const multer_gridfs_storage_1 = require("multer-gridfs-storage");
-const mongoose_1 = require("mongoose");
+const mongoose_1 = __importDefault(require("mongoose"));
 const gridfs_stream_1 = __importDefault(require("gridfs-stream"));
 const express_1 = require("express");
 const upload_1 = require("../Controllers/upload");
@@ -16,9 +16,10 @@ const store = {
     videoStore: null,
     thumbnailStore: null,
 };
-mongoose_1.connection.once('open', () => {
-    store.videoStore = gridfs_stream_1.default(mongoose_1.connection.db, mongoose_1.mongo);
-    store.thumbnailStore = gridfs_stream_1.default(mongoose_1.connection.db, mongoose_1.mongo);
+const conn = mongoose_1.default.connection;
+conn.once('open', () => {
+    store.videoStore = gridfs_stream_1.default(conn.db, mongoose_1.default.mongo);
+    store.thumbnailStore = gridfs_stream_1.default(conn.db, mongoose_1.default.mongo);
     store.videoStore?.collection('videos');
     store.thumbnailStore?.collection('thumbnails');
     store.thumbnailStore;
