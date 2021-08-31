@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StreamVideo = exports.StreamThumbnail = exports.UploadVideo = exports.UploadThumbnail = void 0;
+const baseurl = 'http://localhost:8080';
+// const baseUrl = 'https://possibillion-sample-prj-server.herokuapp.com'
 const UploadThumbnail = (req, res) => {
-    res.status(200).json(`possibillion-sample-prj-server.herokuapp.com/thumbnail/${req.file?.filename}`);
+    res.status(200).json(`${baseurl}/upload/thumbnail/${req.file?.filename}`);
 };
 exports.UploadThumbnail = UploadThumbnail;
 const UploadVideo = (req, res) => {
-    res.status(200).json(`https://possibillion-sample-prj-server.herokuapp.com/video/${req.file?.filename}`);
+    res.status(200).json(`${baseurl}/upload/video/${req.file?.filename}`);
 };
 exports.UploadVideo = UploadVideo;
 const StreamThumbnail = (store, req, res) => {
@@ -34,11 +36,10 @@ const StreamVideo = (store, req, res) => {
             res.status(404).json('Video Not found');
             return;
         }
-        const { range } = req.headers;
-        if (!range) {
-            res.status(400).json('Video range was not specified');
-            return;
-        }
+        let { range } = req.headers;
+        if (!range)
+            range = '0';
+        console.log(video._id);
         const videoSize = video.length;
         const startPos = Number(range.replace(/\D/g, ""));
         const endPos = videoSize - 1;
@@ -51,7 +52,7 @@ const StreamVideo = (store, req, res) => {
         };
         res.writeHead(206, headers);
         const readStream = store.videoStore?.createReadStream({
-            filename: video.filename,
+            _id: video._id,
             range: {
                 startPos, endPos
             }

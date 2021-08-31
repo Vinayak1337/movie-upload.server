@@ -1,12 +1,15 @@
 import { GridFsStore } from ".."
 import { Request, Response } from 'express'
 
+const baseurl = 'http://localhost:8080'
+// const baseUrl = 'https://possibillion-sample-prj-server.herokuapp.com'
+
 export const UploadThumbnail = (req: Request, res: Response) => {
-    res.status(200).json(`possibillion-sample-prj-server.herokuapp.com/thumbnail/${req.file?.filename}`)
+    res.status(200).json(`${baseurl}/upload/thumbnail/${req.file?.filename}`)
 }
 
 export const UploadVideo = (req: Request, res: Response) => {
-    res.status(200).json(`https://possibillion-sample-prj-server.herokuapp.com/video/${req.file?.filename}`)
+    res.status(200).json(`${baseurl}/upload/video/${req.file?.filename}`)
 }
 
 export const StreamThumbnail = (store: GridFsStore, req: Request, res: Response) => {
@@ -40,12 +43,10 @@ export const StreamVideo = (store: GridFsStore, req: Request, res: Response) => 
             return
         }
 
-        const { range } = req.headers
+        let { range } = req.headers
 
-        if (!range) {
-            res.status(400).json('Video range was not specified')
-            return;
-        }
+        if (!range) range = '0'
+        console.log(video._id)
 
         const videoSize = video.length
         const startPos = Number(range.replace(/\D/g, ""))
@@ -62,7 +63,7 @@ export const StreamVideo = (store: GridFsStore, req: Request, res: Response) => 
         res.writeHead(206, headers)
 
         const readStream = store.videoStore?.createReadStream({
-            filename: video.filename,
+            _id: video._id,
             range: {
                 startPos, endPos
             }

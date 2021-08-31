@@ -28,5 +28,9 @@ const moveiSchema = new mongoose_1.Schema({
         type: Number,
         default: 0,
     },
+    uploadedOn: {
+        type: Date,
+        default: new Date(),
+    }
 }, { minimize: false });
 exports.moviesModel = mongoose_1.model('movies', moveiSchema);

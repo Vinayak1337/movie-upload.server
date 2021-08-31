@@ -48,8 +48,8 @@ const thumbnailStorage = new multer_gridfs_storage_1.GridFsStorage({
 });
 const videoMulter = multer_1.default({ storage: videosStorage });
 const thumbnailMulter = multer_1.default({ storage: thumbnailStorage });
+uploadRouter.get('/thumbnail/:filename', upload_1.StreamThumbnail.bind(null, store));
+uploadRouter.get('/video/:filename', upload_1.StreamVideo.bind(null, store));
 uploadRouter.post('/video', videoMulter.single('video'), upload_1.UploadVideo);
 uploadRouter.post('/thumbnail', thumbnailMulter.single('thumbnail'), upload_1.UploadThumbnail);
-uploadRouter.get('/video:filename', upload_1.StreamVideo.bind(null, store));
-uploadRouter.get('/thumbnail:filename', upload_1.StreamThumbnail.bind(null, store));
 exports.default = uploadRouter;

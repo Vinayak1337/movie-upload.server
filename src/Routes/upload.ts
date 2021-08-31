@@ -54,12 +54,12 @@ const thumbnailStorage = new GridFsStorage({
 const videoMulter = multer({ storage: videosStorage })
 const thumbnailMulter = multer({ storage: thumbnailStorage })
 
+uploadRouter.get('/thumbnail/:filename', StreamThumbnail.bind(null, store))
+
+uploadRouter.get('/video/:filename', StreamVideo.bind(null, store))
+
 uploadRouter.post('/video', videoMulter.single('video'), UploadVideo)
 
 uploadRouter.post('/thumbnail', thumbnailMulter.single('thumbnail'), UploadThumbnail)
-
-uploadRouter.get('/video:filename', StreamVideo.bind(null, store))
-
-uploadRouter.get('/thumbnail:filename', StreamThumbnail.bind(null, store))
 
 export default uploadRouter
