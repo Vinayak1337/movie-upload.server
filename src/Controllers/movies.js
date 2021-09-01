@@ -14,7 +14,7 @@ exports.getMovies =  async (req, res) => {
             return
         }
     
-        const movies = await moviesModel.find({}, null, { limit: limit } )
+        const movies = await moviesModel.find({}, null, { limit: Number(limit) } )
     
         res.status(200).json(movies)
     } catch (error) {
