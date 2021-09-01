@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const moveiSchema = new mongoose.Schema({
+    id: mongoose.Schema.Types.ObjectId,
     movieName: {
         type: String,
         required: true,
