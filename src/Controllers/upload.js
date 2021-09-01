@@ -11,15 +11,15 @@ exports.UploadVideo = (req, res) => {
 
 exports.StreamThumbnail = async (store, req, res) => {
     try {
-        const thumbnail = await store.thumbnailStore?.files.findOne({ filename: req.params['filename'] } )
+        const thumbnail = await store.thumbnailStore.files.findOne({ filename: req.params['filename'] } )
 
         if (!thumbnail) {
             res.status(404).json('Did not find thumbnail')
             return
         }
 
-        const readStream = store.thumbnailStore?.createReadStream(thumbnail["filename"])
-        readStream?.pipe(res)
+        const readStream = store.thumbnailStore.createReadStream({ _id: thumbnail._id })
+        readStream.pipe(res)
     } catch (error) {
         console.log(error)
         res.status(500).json(`Something went wrong. ${error.message}`)
@@ -39,7 +39,6 @@ exports.StreamVideo = async (store, req, res) => {
         let { range } = req.headers
 
         if (!range) range = '0'
-        console.log(video["_id"])
 
         const videoSize = video["length"]
         const startPos = Number(range.replace(/\D/g, ""))
@@ -53,15 +52,15 @@ exports.StreamVideo = async (store, req, res) => {
             "Content-Type": video["contentType"],
         }
 
-        res.writeHead(206, headers)
-
-        const readStream = store.videoStore?.createReadStream({
+        
+        const readStream = store.videoStore.createReadStream({
             _id: video["_id"],
             range: {
                 startPos, endPos
             }
         })
-        readStream?.pipe(res)
+        res.writeHead(206, headers)
+        readStream.pipe(res)
     } catch (error) {
         console.log(error)
         res.status(500).json(`Something went wrong. ${error.message}`)

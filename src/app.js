@@ -29,7 +29,12 @@ app.get('/', (_req, res) => {
 app.use('/movies', moviesRouter)
 app.use('/upload', uploadRouter)
 
-mongoose.connect(process.env['URI'] || '')
+mongoose.connect(process.env['URI'], {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+	useFindAndModify: false,
+	useCreateIndex: true,
+})
     .then(() => {
         console.log('✅ Connected to database.')
 
@@ -37,3 +42,4 @@ mongoose.connect(process.env['URI'] || '')
             console.log(`✅ Connected to port ${process.env['PORT'] || 8080}.`)
         })
     })
+    .catch(console.error)
