@@ -2,10 +2,15 @@ const moviesModel = require("../Models/moviesModel")
 
 exports.getMovies =  async (req, res) => {
     try {
-        const { limit } = req.body
+        const { limit } = req.params
 
         if (!limit) {
             res.status(400).json('Please provide movies limit.')
+            return
+        }
+
+        if (!limit.match(/^\d+$/g)) {
+            res.status(400).json('Invalid limit. You can only pass a number.')
             return
         }
     
