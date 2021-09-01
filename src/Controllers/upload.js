@@ -1,5 +1,5 @@
-const baseurl = 'http://localhost:8080'
-// const baseUrl = 'https://possibillion-sample-prj-server.herokuapp.com'
+// const baseurl = 'http://localhost:8080'
+const baseurl = 'https://possibillion-sample-prj-server.herokuapp.com'
 
 exports.UploadThumbnail = (req, res) => {
     res.status(200).json(`${baseurl}/upload/thumbnail/${req.file?.filename}`)
